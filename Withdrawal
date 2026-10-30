@@ -1,0 +1,25 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. WITHDRAW.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+           01 WS-ACC PIC X.
+           01 WS-KYC PIC X.
+           01 WS-FR_HD PIC X.
+       PROCEDURE DIVISION.
+           DISPLAY "STATUS OF ACCOUNT(A/I): ".
+           ACCEPT WS-ACC.
+           MOVE FUNCTION UPPER-CASE(WS-ACC) TO WS-ACC.
+           DISPLAY " STATUS OF KYC(Y/N): ".
+           ACCEPT WS-KYC.
+           MOVE FUNCTION UPPER-CASE(WS-KYC) TO WS-KYC.
+           DISPLAY " STATUS OF FRAUD HOLD(Y/N): ".
+           ACCEPT WS-FR_HD.
+           MOVE FUNCTION UPPER-CASE(WS-FR_HD) TO WS-FR_HD.
+           IF WS-ACC = "A" AND WS-KYC = "Y" AND WS-FR_HD = "N" 
+               DISPLAY "ALLOW"
+           IF WS-ACC = "ACTIVE" AND WS-KYC = "YES" AND WS-FR_HD = "NO"
+           
+           ELSE 
+               DISPLAY "BLOCK"
+           END-IF
+       STOP RUN.
