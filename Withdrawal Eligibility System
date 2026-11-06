@@ -1,0 +1,78 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ACCOUNT-TEST.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT INPUT-FILE
+           ASSIGN TO "BANK_DB.TXT"
+           ORGANIZATION IS LINE SEQUENTIAL.
+
+       DATA DIVISION.
+       FILE SECTION.
+       FD INPUT-FILE.
+         01 INPUT-RECORD PIC X(100).
+
+       WORKING-STORAGE SECTION.
+
+         01 ACCOUNT-NUMBER PIC X(9).
+         01 CUSTOMER-NAME  PIC X(30).
+         01 ACCOUNT-STATUS PIC X.
+         01 KYC-FLAG       PIC X.
+         01 FRAUD-HOLD     PIC X.
+         01 SEARCH-ACCOUNT PIC X(9).
+         01 EOF-FLAG       PIC X VALUE 'N'.
+         01 FOUND-FLAG     PIC X VALUE 'N'.
+
+       PROCEDURE DIVISION.
+           DISPLAY "           BANKING SYSTEM"
+           DISPLAY "ENTER ACCOUNT NUMBER: "
+           ACCEPT SEARCH-ACCOUNT
+
+           OPEN INPUT INPUT-FILE
+           PERFORM UNTIL EOF-FLAG = 'Y'
+                  OR FOUND-FLAG = 'Y'
+           READ INPUT-FILE
+               AT END
+                   MOVE 'Y' TO EOF-FLAG
+               NOT AT END
+                   UNSTRING INPUT-RECORD
+                       DELIMITED BY ","
+                       INTO ACCOUNT-NUMBER
+                            CUSTOMER-NAME
+                            ACCOUNT-STATUS
+                            KYC-FLAG
+                            FRAUD-HOLD
+                   END-UNSTRING
+                   IF ACCOUNT-NUMBER = SEARCH-ACCOUNT
+                       MOVE 'Y' TO FOUND-FLAG
+                       DISPLAY " "
+                       DISPLAY "ACCOUNT DETAILS"
+                       DISPLAY "ACCOUNT NUMBER : "
+                           ACCOUNT-NUMBER
+                       DISPLAY "CUSTOMER NAME  : "
+                           FUNCTION TRIM(CUSTOMER-NAME)
+                       DISPLAY "ACCOUNT STATUS : "
+                           ACCOUNT-STATUS
+                       DISPLAY "KYC STATUS     : "
+                           KYC-FLAG
+                       DISPLAY "FRAUD HOLD     : "
+                           FRAUD-HOLD
+                       DISPLAY "---------------------------------------"
+                       IF ACCOUNT-STATUS = 'A'
+                          AND KYC-FLAG = 'Y'
+                          AND FRAUD-HOLD = 'N'
+                           DISPLAY "WITHDRAWAL STATUS : ALLOW"
+                       ELSE
+                           DISPLAY "WITHDRAWAL STATUS : BLOCK"
+                       END-IF
+                   END-IF
+           END-READ
+       END-PERFORM
+           CLOSE INPUT-FILE
+           IF FOUND-FLAG = 'N'
+           DISPLAY "ACCOUNT NOT FOUND!"
+           END-IF
+           STOP RUN.
+
+
