@@ -1,0 +1,31 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. CUSTSPLIT.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-INPUT-RECORD PIC X(100).
+       01 WS-CUSTOMER-ID PIC X(10).
+       01 WS-CUSTOMER-NAME PIC X(20).
+       01 WS-STATUS PIC X(10).
+       01 WS-BALANCE-TEXT PIC X(10).
+
+       PROCEDURE DIVISION.
+           DISPLAY "ENTER CUSTOMER RECORD"
+           DISPLAY "(ID,NAME,STATUS,BALANCE):"
+           ACCEPT WS-INPUT-RECORD
+           UNSTRING WS-INPUT-RECORD
+               DELIMITED BY ","
+               INTO WS-CUSTOMER-ID
+                    WS-CUSTOMER-NAME
+                    WS-STATUS
+                    WS-BALANCE-TEXT
+           END-UNSTRING
+
+           DISPLAY "CUSTOMER ACCOUNT DETAILS"
+           DISPLAY "CUSTOMER ID: "
+                   FUNCTION TRIM(WS-CUSTOMER-ID)
+           DISPLAY "CUSTOMER NAME: "
+                   FUNCTION TRIM(WS-CUSTOMER-NAME)
+           DISPLAY "ACCOUNT STATUS: "
+                   FUNCTION TRIM(WS-STATUS)
+           STOP RUN.
