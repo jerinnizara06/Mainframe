@@ -45,3 +45,4 @@
                        WS-BALANCE(WS-IDX)
            END-SEARCH
            STOP RUN.
+           
