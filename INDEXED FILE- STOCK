@@ -1,0 +1,72 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. CREATE-STOCK.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT STOCK-INPUT ASSIGN TO "ITEMMASTER.TXT"
+               ORGANIZATION IS LINE SEQUENTIAL
+               FILE STATUS IS WS-IN-STATUS.
+           SELECT ITEM-MASTER ASSIGN TO "ITEMMASTER"
+               ORGANIZATION IS INDEXED
+               ACCESS MODE IS SEQUENTIAL
+               RECORD KEY IS ITEM-ID
+               FILE STATUS IS WS-OUT-STATUS.
+       DATA DIVISION.
+       FILE SECTION.
+       FD STOCK-INPUT.
+       01 STOCK-LINE PIC X(30).
+       FD ITEM-MASTER.
+       01 ITEM-REC.
+          05 ITEM-ID          PIC X(08).
+          05 ITEM-NAME        PIC X(10).
+          05 ITEM-STOCK-QTY   PIC 9(05).
+       WORKING-STORAGE SECTION.
+       01 WS-IN-STATUS        PIC X(02).
+       01 WS-OUT-STATUS       PIC X(02).
+       01 WS-EOF              PIC X VALUE 'N'.
+       01 WS-ID               PIC X(08).
+       01 WS-NAME             PIC X(10).
+       01 WS-QTY-TEXT         PIC X(05).
+       PROCEDURE DIVISION.
+       MAIN-PARA.
+           OPEN INPUT STOCK-INPUT
+           IF WS-IN-STATUS = '00'
+               OPEN OUTPUT ITEM-MASTER
+               IF WS-OUT-STATUS = '00'
+                   PERFORM UNTIL WS-EOF = 'Y'
+                       READ STOCK-INPUT
+                           AT END
+                               MOVE 'Y' TO WS-EOF
+                           NOT AT END
+                               UNSTRING STOCK-LINE
+                                   DELIMITED BY ','
+                                   INTO WS-ID
+                                        WS-NAME
+                                        WS-QTY-TEXT
+                               END-UNSTRING
+                               MOVE WS-ID TO ITEM-ID
+                               MOVE WS-NAME TO ITEM-NAME
+                               MOVE WS-QTY-TEXT
+                                   TO ITEM-STOCK-QTY
+                               WRITE ITEM-REC
+                               IF WS-OUT-STATUS = '00'
+                                   DISPLAY 'RECORD ADDED: '
+                                       ITEM-ID
+                               ELSE
+                                   DISPLAY 'WRITE ERROR: '
+                                       WS-OUT-STATUS
+                               END-IF
+                       END-READ
+                   END-PERFORM
+                   CLOSE ITEM-MASTER
+                   DISPLAY 'INDEXED FILE CREATED'
+               ELSE
+                   DISPLAY 'OUTPUT OPEN ERROR: '
+                       WS-OUT-STATUS
+               END-IF
+               CLOSE STOCK-INPUT
+           ELSE
+               DISPLAY 'INPUT OPEN ERROR: '
+                   WS-IN-STATUS
+           END-IF.
+           STOP RUN.
