@@ -1,0 +1,52 @@
+       
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. FRAUDCHK.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+       01 WS-ACCOUNT-NO PIC X(9).
+       01 WS-CUSTOMER-NAME PIC X(25).
+       01 WS-ACCOUNT-STATUS PIC X.
+       01 WS-KYC-STATUS PIC X.
+       01 WS-FRAUD-HOLD PIC X.
+       01 WS-TRANSACTION-AMOUNT PIC 9(8).
+
+       PROCEDURE DIVISION.
+
+           DISPLAY "ENTER ACCOUNT NUMBER:"
+           ACCEPT WS-ACCOUNT-NO
+           DISPLAY "ENTER CUSTOMER NAME:"
+           ACCEPT WS-CUSTOMER-NAME
+           DISPLAY "ENTER ACCOUNT STATUS (A/I):"
+           ACCEPT WS-ACCOUNT-STATUS
+           DISPLAY "ENTER KYC STATUS (Y/N):"
+           ACCEPT WS-KYC-STATUS
+           DISPLAY "ENTER FRAUD HOLD (Y/N):"
+           ACCEPT WS-FRAUD-HOLD
+           DISPLAY "ENTER TRANSACTION AMOUNT:"
+           ACCEPT WS-TRANSACTION-AMOUNT
+           DISPLAY "TRANSACTION VERIFICATION"
+           DISPLAY "ACCOUNT NUMBER: "
+               WS-ACCOUNT-NO
+           DISPLAY "CUSTOMER NAME: "
+               WS-CUSTOMER-NAME
+           DISPLAY "TRANSACTION AMOUNT: "
+               WS-TRANSACTION-AMOUNT
+           IF WS-ACCOUNT-STATUS = "A"
+               IF WS-KYC-STATUS = "Y"
+                   IF WS-FRAUD-HOLD = "N"
+                       DISPLAY "DECISION: APPROVED"
+                   ELSE
+                       DISPLAY "DECISION: BLOCKED"
+                       DISPLAY "REASON: FRAUD HOLD EXISTS"
+                   END-IF
+               ELSE
+                   DISPLAY "DECISION: BLOCKED"
+                   DISPLAY "REASON: KYC NOT COMPLETED"
+               END-IF
+           ELSE
+               DISPLAY "DECISION: BLOCKED"
+               DISPLAY "REASON: ACCOUNT IS INACTIVE"
+           END-IF
+           STOP RUN.
