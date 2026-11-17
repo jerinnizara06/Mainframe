@@ -1,0 +1,47 @@
+       
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ACCT88.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+       01 WS-ACCOUNT-NO PIC X(9).
+       01 WS-CUSTOMER-NAME PIC X(25).
+       01 WS-ACCOUNT-STATUS PIC X.
+          88 ACCOUNT-ACTIVE VALUE "A".
+          88 ACCOUNT-INACTIVE VALUE "I".
+          88 ACCOUNT-FROZEN VALUE "F".
+       01 WS-TRANSACTION-AMOUNT PIC 9(8).
+       PROCEDURE DIVISION.
+           DISPLAY "ENTER ACCOUNT NUMBER:"
+           ACCEPT WS-ACCOUNT-NO
+           DISPLAY "ENTER CUSTOMER NAME:"
+           ACCEPT WS-CUSTOMER-NAME
+           DISPLAY "ENTER ACCOUNT STATUS (A/I/F):"
+           ACCEPT WS-ACCOUNT-STATUS
+           DISPLAY "ENTER TRANSACTION AMOUNT:"
+           ACCEPT WS-TRANSACTION-AMOUNT
+           DISPLAY "ACCOUNT VERIFICATION"
+           DISPLAY "ACCOUNT NUMBER: "
+               WS-ACCOUNT-NO
+           DISPLAY "CUSTOMER NAME: "
+               WS-CUSTOMER-NAME
+           IF ACCOUNT-ACTIVE
+               DISPLAY "STATUS: ACTIVE"
+               DISPLAY "TRANSACTION ELIGIBLE"
+               DISPLAY "TRANSACTION AMOUNT: "
+                   WS-TRANSACTION-AMOUNT
+           ELSE
+               IF ACCOUNT-INACTIVE
+                   DISPLAY "STATUS: INACTIVE"
+                   DISPLAY "TRANSACTION BLOCKED"
+               ELSE
+                   IF ACCOUNT-FROZEN
+                       DISPLAY "STATUS: FROZEN"
+                       DISPLAY "TRANSACTION BLOCKED"
+                   ELSE
+                       DISPLAY "INVALID ACCOUNT STATUS"
+                   END-IF
+               END-IF
+           END-IF
+           STOP RUN.
