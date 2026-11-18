@@ -1,0 +1,25 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. TRIMBANK.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+       01 WS-CUSTOMER-NAME PIC X(30).
+       01 WS-CITY PIC X(20).
+       01 WS-EMAIL PIC X(40).
+
+       PROCEDURE DIVISION.
+           DISPLAY "ENTER CUSTOMER NAME:"
+           ACCEPT WS-CUSTOMER-NAME
+           DISPLAY "ENTER CITY:"
+           ACCEPT WS-CITY
+           DISPLAY "ENTER EMAIL:"
+           ACCEPT WS-EMAIL
+           DISPLAY "CUSTOMER DETAILS"
+           DISPLAY "NAME: "
+               FUNCTION TRIM(WS-CUSTOMER-NAME)
+           DISPLAY "CITY: "
+               FUNCTION TRIM(WS-CITY)
+           DISPLAY "EMAIL: "
+               FUNCTION TRIM(WS-EMAIL)
+           STOP RUN.
